@@ -205,7 +205,7 @@ public:
 			   + flange_area * (T_centroid - flange_centroid)*(T_centroid - flange_centroid);
 	}
 
-	double Ixy() {
+	double Iyy() {
 		return 0.08333333333*((TFt*TFw*TFw*TFw) + (Wh*Wt*Wt*Wt));
 	}
 };
@@ -238,12 +238,60 @@ public:
 	}
 
 	double Ixx() {
+		return 0.08333333*((BFw*BFt*BFt*BFt) + (LFt*LFh*LFh*LFh))
+			+ left_area * (L_centroid - left_centroid)*(L_centroid - left_centroid)
+			+ bottom_area * (L_centroid - bottom_centroid)*(L_centroid - bottom_centroid);
+	}
+
+};
+
+class channel_beam :public answers {
+private:
+	double h; double Wt; double RFh; double RFt; double LFh; double LFt;
+	double right_area; double left_area; double web_area;
+	double right_centroid; double left_centroid; double web_centroid; double C_centroid;
+public:
+	void set_parameters() {
+		cout << "channel beam setup" << endl;
+		cout << "enter channel width" << endl;
+		cin >> h;
+		cout << "enter web thickness" << endl;
+		cin >> Wt;
+		cout << "enter right flange height" << endl;
+		cin >> RFh;
+		cout << "enter right flange thickness" << endl;
+		cin >> RFt;
+		cout << "enter left flange height" << endl;
+		cin >> LFh;
+		cout << "ener left flange width" << endl;
+		cin >> LFt;
+	}
+
+	double centroid(){
+		web_area = (h*Wt);
+		right_area = RFt * RFh;
+		left_area = LFh * LFh;
+		web_centroid = Wt * 0.5;
+		right_centroid = 0.5*RFh + Wt;
+		left_centroid = 0.5*LFh + Wt;
+		C_centroid = ((web_area*web_centroid) + (right_area*right_centroid) + (left_area*left_centroid)) / (right_area + left_area + web_centroid);
+		return C_centroid;
+	}
+
+	double Ixx() {	
+		return 0.08333333*((h*Wt*Wt*Wt) + (RFh*RFh*RFh*RFt) + (LFh*LFh*LFh*LFt)) +
+			right_area * (C_centroid - right_centroid)*(C_centroid - right_centroid)
+			+ left_area * (C_centroid - left_centroid)*(C_centroid - left_centroid)
+			+ web_area * (C_centroid - web_centroid)*(C_centroid - web_centroid);
+	}
+
+	double Iyy() {
 
 	}
 
 
-
 };
+
 
 			
 
