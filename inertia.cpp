@@ -1,5 +1,3 @@
-//Author:Der Zhi Jeremy Sow
-//Date: 22/3/19
 
 #include "pch.h"
 #include <iostream>
